@@ -1,0 +1,49 @@
+@model Rsvp
+
+<div id="container" class="text-center">
+    <h1>Welcome to the Wedding Planner</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Wedding</th>
+                <th>Date</th>
+                <th>Guest</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Wedding wedding in ViewBag.AllWeddings)
+            {
+                bool isRsvp = wedding.WeddingGuests
+                .Any(rsvp => rsvp.UserId == Context.Session.GetInt32("Uid"));
+                <tr>
+                    <td><a asp-controller="Weddings" asp-action="Show" asp-route-weddingId="@wedding.WeddingId">@wedding.WedderOne & @wedding.WedderTwo</a></td>
+                    <td>@wedding.Date.ToString("MMMM dd, yyyy")</td>
+                    <td>@wedding.WeddingGuests.Count</td>
+                    <td>
+                        @if (@wedding.UserId == Context.Session.GetInt32("Uid"))
+                        {
+                            <form asp-controller="Weddings" asp-action="Delete" asp-route-weddingId="@wedding.WeddingId">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-controller="Weddings" asp-action="Rsvp" asp-route-weddingId="@wedding.WeddingId">
+                                @if (isRsvp)
+                                {
+                                    <button class="btn btn-primary">Un-RSVP</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-success">RSVP</button>
+                                }
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-controller="Weddings" asp-action="New" class="btn btn-outline-primary">New Wedding</a>
+</div>

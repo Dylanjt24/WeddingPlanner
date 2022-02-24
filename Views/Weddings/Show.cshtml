@@ -1,0 +1,11 @@
+@model Wedding
+
+<h1>@Model.WedderOne and @Model.WedderTwo's Wedding</h1>
+<p><strong>Date:</strong> @Model.Date.ToString("MMMM dd, yyyy")</p>
+<p><strong>Guests:</strong></p>
+<ul class="list-unstyled ml-3">
+    @foreach (Rsvp guest in Model.WeddingGuests)
+    {
+        <li>@guest.User.FirstName @guest.User.LastName</li>
+    }
+</ul>
